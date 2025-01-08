@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Шаурма Лаваш</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Меню</h1>
+  <p>Общая стоимость: <span id="total-price">0</span> руб.</p>
+  <div id="menu"></div>
+
+  <h2>Заказ</h2>
+  <div id="order-list"></div>
+
+  <h2>Калькулятор</h2>
+  <div id="calculator">
+    <input type="text" id="calculator-display" disabled>
+    <div id="calculator-buttons">
+      <button data-value="7">7</button>
+      <button data-value="8">8</button>
+      <button data-value="9">9</button>
+      <button data-value="/">/</button>
+      <button data-value="4">4</button>
+      <button data-value="5">5</button>
+      <button data-value="6">6</button>
+      <button data-value="*">*</button>
+      <button data-value="1">1</button>
+      <button data-value="2">2</button>
+      <button data-value="3">3</button>
+      <button data-value="-">-</button>
+      <button data-value="0">0</button>
+      <button data-value=".">.</button>
+      <button data-value="C">C</button>
+      <button data-value="+">+</button>
+      <button data-value="=" class="equals">=</button>
+    </div>
+    <div id="change-calculator">
+      <input type="number" id="amount-paid" placeholder="Внесенная сумма">
+      <button id="calculate-change">Рассчитать сдачу</button>
+      <p>Сдача: <span id="change-amount">0</span> руб.</p>
+      <a href="admin.html">Админ панель</a>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
