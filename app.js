@@ -17,24 +17,37 @@ let totalPrice = 0;
 // Загрузка меню
 async function loadMenu() {
   const querySnapshot = await getDocs(collection(db, "menu"));
+  const categories = {};
+
   querySnapshot.forEach((doc) => {
     const item = doc.data();
-    menuItems.push(item); // Сохраняем пункты меню в массив
-
-    // Добавляем пункт меню в список
-    const itemElement = document.createElement('div');
-    itemElement.className = 'menu-item';
-    itemElement.innerHTML = `
-      <h3>${item.name}</h3>
-      <p>Цена: ${item.price} руб.</p>
-      <label>
-        Количество: 
-        <input type="number" value="1" min="1" class="item-quantity">
-      </label>
-      <button onclick="addToOrder('${item.name}', ${item.price}, this)">Добавить в заказ</button>
-    `;
-    menuContainer.appendChild(itemElement);
+    if (!categories[item.category]) {
+      categories[item.category] = [];
+    }
+    categories[item.category].push(item);
   });
+
+  for (const category in categories) {
+    const categoryElement = document.createElement('div');
+    categoryElement.className = 'category';
+    categoryElement.innerHTML = `<h2>${category}</h2>`;
+    menuContainer.appendChild(categoryElement);
+
+    categories[category].forEach(item => {
+      const itemElement = document.createElement('div');
+      itemElement.className = 'menu-item';
+      itemElement.innerHTML = `
+        <h3>${item.name}</h3>
+        <p>Цена: ${item.price} руб.</p>
+        <label>
+          Количество: 
+          <input type="number" value="1" min="1" class="item-quantity">
+        </label>
+        <button onclick="addToOrder('${item.name}', ${item.price}, this)">Добавить в заказ</button>
+      `;
+      menuContainer.appendChild(itemElement);
+    });
+  }
 }
 
 // Добавление в заказ

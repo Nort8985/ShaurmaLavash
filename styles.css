@@ -1,54 +1,129 @@
+/* Основные стили */
 body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
-a{
-  color:black;
+a {
+  color: #4a90e2;
+  text-decoration: none;
 }
 
-.center-button {
-  display: flex;
-  justify-content: center; /* Центрирует по горизонтали */
+a:hover {
+  text-decoration: underline;
 }
 
 h1, h2 {
   text-align: center;
+  color: #444;
 }
 
-.menu-item, .order-item {
+/* Категории */
+.category {
+  margin-top: 30px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 15px;
+}
+
+/* Элементы меню */
+.menu-item {
+  margin: 15px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.menu-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.menu-item h3 {
+  margin: 0 0 10px;
+  color: #555;
+}
+
+.menu-item p {
+  margin: 5px 0;
+  color: #777;
+}
+
+.menu-item label {
+  display: block;
+  margin: 10px 0 5px;
+  color: #555;
+}
+
+.menu-item input {
+  width: 60px;
+  padding: 5px;
   border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px 0;
   border-radius: 5px;
 }
 
-.menu-item button, .order-item button {
+.menu-item button {
   background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menu-item button:hover {
+  background-color: #357ABD;
+}
+
+/* Заказ */
+.order-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order-item button {
+  background-color: #e74c3c;
   color: white;
   border: none;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.menu-item button:hover, .order-item button:hover {
-  background-color: #357ABD;
+.order-item button:hover {
+  background-color: #c0392b;
 }
 
+/* Калькулятор */
 #calculator {
-  margin-top: 20px;
+  margin-top: 30px;
   text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 #calculator-display {
   width: 100%;
-  padding: 10px;
-  font-size: 18px;
-  margin-bottom: 10px;
+  padding: 15px;
+  font-size: 20px;
+  margin-bottom: 15px;
   text-align: right;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
 }
 
 #calculator-buttons {
@@ -58,16 +133,19 @@ h1, h2 {
 }
 
 #calculator-buttons button {
-  padding: 15px;
+  padding: 20px;
   font-size: 18px;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: #f0f0f0;
   cursor: pointer;
+  background-color: green;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
 #calculator-buttons button:hover {
   background-color: #ddd;
+  transform: scale(1.05);
 }
 
 #calculator-buttons .equals {
@@ -77,68 +155,90 @@ h1, h2 {
 }
 
 #calculator-buttons .equals:hover {
-  background-color: #218838;
+  background-color: green;
 }
 
+/* Расчет сдачи */
 #change-calculator {
   margin-top: 20px;
+  text-align: center;
 }
 
 #change-calculator input {
-  padding: 5px;
-  margin: 5px;
-  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
   border: 1px solid #ccc;
+  width: 200px;
 }
 
 #change-calculator button {
   background-color: #4a90e2;
   color: white;
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  padding: 10px 20px;
+  border-radius: 10px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 #change-calculator button:hover {
   background-color: #357ABD;
 }
 
-h1 {
-  text-align: center;
-}
-
-.menu-item {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-}
-
+/* Форма админки */
 form {
   display: flex;
   flex-direction: column;
-  max-width: 300px;
+  max-width: 400px;
   margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 label {
   margin-top: 10px;
+  color: #555;
 }
 
-input, button {
+input, select, button {
   margin-top: 5px;
-  padding: 8px;
-  border-radius: 5px;
+  padding: 10px;
+  border-radius: 10px;
   border: 1px solid #ccc;
+  font-size: 16px;
 }
 
 button {
   background-color: #28a745;
+  color: white;
   border: none;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 button:hover {
   background-color: #218838;
+}
+
+/* Центрирование кнопки "Назад" */
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.center-button a {
+  background-color: #4a90e2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.center-button a:hover {
+  background-color: #357ABD;
 }
