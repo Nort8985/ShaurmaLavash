@@ -24,6 +24,67 @@ const menuItems = [
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 
+// Элементы калькулятора
+const calculatorDisplay = document.getElementById('calculator-display');
+const calculatorButtons = document.getElementById('calculator-buttons');
+
+// Переменные для калькулятора
+let currentInput = '';
+let operator = '';
+let firstOperand = '';
+let secondOperand = '';
+
+// Обработчик для кнопок калькулятора
+calculatorButtons.addEventListener('click', (e) => {
+  if (e.target.tagName === 'BUTTON') {
+    const value = e.target.dataset.value;
+
+    if (value === 'C') {
+      // Очистка калькулятора
+      currentInput = '';
+      operator = '';
+      firstOperand = '';
+      secondOperand = '';
+      calculatorDisplay.value = '';
+    } else if (value === '=') {
+      // Вычисление результата
+      if (firstOperand && operator && currentInput) {
+        secondOperand = currentInput;
+        const result = calculate(firstOperand, operator, secondOperand);
+        calculatorDisplay.value = result;
+        currentInput = result;
+        operator = '';
+        firstOperand = '';
+        secondOperand = '';
+      }
+    } else if (['+', '-', '*', '/'].includes(value)) {
+      // Установка оператора
+      if (currentInput) {
+        firstOperand = currentInput;
+        operator = value;
+        currentInput = '';
+      }
+    } else {
+      // Ввод чисел
+      currentInput += value;
+      calculatorDisplay.value = currentInput;
+    }
+  }
+});
+
+// Функция для вычисления
+function calculate(a, op, b) {
+  a = parseFloat(a);
+  b = parseFloat(b);
+  switch (op) {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return a / b;
+    default: return 0;
+  }
+}
+
 // Элементы для заказа
 const orderList = document.getElementById('order-list');
 const totalPriceElement = document.getElementById('total-price');
