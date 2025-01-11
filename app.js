@@ -46,6 +46,10 @@ calculatorButtons.addEventListener('click', (e) => {
       firstOperand = '';
       secondOperand = '';
       calculatorDisplay.value = '';
+    } else if (value === '←') {
+      // Удаление последней цифры
+      currentInput = currentInput.slice(0, -1); // Удаляем последний символ
+      calculatorDisplay.value = currentInput;
     } else if (value === '=') {
       // Вычисление результата
       if (firstOperand && operator && currentInput) {

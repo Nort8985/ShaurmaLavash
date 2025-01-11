@@ -7,6 +7,15 @@ body {
   color: #333;
 }
 
+#calculator-buttons button[data-value="←"] {
+  background-color: #ffc107; /* Жёлтый цвет для кнопки "Удалить" */
+  color: black;
+}
+
+#calculator-buttons button[data-value="←"]:hover {
+  background-color: #e0a800; /* Темнее при наведении */
+}
+
 #search-container {
   margin: 20px 0;
   text-align: center;
