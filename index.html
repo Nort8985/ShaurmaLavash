@@ -12,7 +12,7 @@
     <input type="text" id="search-input" placeholder="Поиск по меню">
     <button id="search-button">Найти</button>
   </div>
-  <p>Общая стоимость: <span id="total-price">0</span> руб.</p>
+  <p>Общая стоимость: <span id="total-price">0.00</span> руб.</p>
   <div id="menu"></div>
 
   <h2>Заказ</h2>
@@ -46,7 +46,12 @@
       <input type="number" id="amount-paid" placeholder="Внесенная сумма">
       <button id="calculate-change">Рассчитать сдачу</button>
       <p>Сдача: <span id="change-amount">0</span> руб.</p>
-      <a href="admin.html">Админ панель</a>
+    </div>
+    <div align="center"><h3 class="textik">Если нет сдачи то ниже введи сумму которая должна быть и тебе подскажут сколько надо спросить чтобы ты дал(а) сдачу 50 руб.<br><br>Если написать больше 50 то считать будет для сдачи в 100 руб.<h4 class="textik">(незнаю зачем, вдруг понадобиться)</h4></h3></div>
+    <div id="cash-calculator">
+      <input type="number" id="amount-cash" placeholder="Сколько сдача">
+      <button id="calculate-cash">Сколько спросить</button>
+      <p>Спросить: <span id="cash-amount">0</span></p>
     </div>
   </div>
 

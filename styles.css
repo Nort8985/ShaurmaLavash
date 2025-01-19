@@ -7,6 +7,10 @@ body {
   color: #333;
 }
 
+.textik {
+  color: red;
+}
+
 #calculator-buttons button[data-value="←"] {
   background-color: #ffc107; /* Жёлтый цвет для кнопки "Удалить" */
   color: black;
@@ -219,6 +223,34 @@ h1, h2 {
 }
 
 #change-calculator button:hover {
+  background-color: #357ABD;
+}
+
+/* Расчет сдачи */
+#cash-calculator {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#cash-calculator input {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 200px;
+}
+
+#cash-calculator button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#cash-calculator button:hover {
   background-color: #357ABD;
 }
 

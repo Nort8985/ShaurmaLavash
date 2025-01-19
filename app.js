@@ -6,7 +6,7 @@ const menuItems = [
   { name: "ШАУРМА Сырная", price: 220, category: "Шаурма" },
   { name: "ШАУРМА Грибная", price: 230, category: "Шаурма" },
   { name: "ШАУРМА С вишней", price: 235, category: "Шаурма" },
-  { name: "ШАУРМА Биг тесто", price: 245, category: "Шаурма" },
+  { name: "ШАУРМА Биг тэсти", price: 245, category: "Шаурма" },
   { name: "СОСИСКА В ЛАВАШЕ С овощами", price: 120, category: "Сосиски в лаваше" },
   { name: "СОСИСКА В ЛАВАШЕ С сыром", price: 135, category: "Сосиски в лаваше" },
   { name: "Картофель фри", price: 85, category: "Снеки" },
@@ -85,7 +85,7 @@ function calculate(a, op, b) {
     case '-': return a - b;
     case '*': return a * b;
     case '/': return a / b;
-    default: return 0;
+    default: return .0;
   }
 }
 
@@ -97,6 +97,12 @@ const totalPriceElement = document.getElementById('total-price');
 const amountPaidInput = document.getElementById('amount-paid');
 const calculateChangeButton = document.getElementById('calculate-change');
 const changeAmountElement = document.getElementById('change-amount');
+
+// Элементы для расчёта сдачи
+const amountCashInput = document.getElementById('amount-cash');
+const calculateCashButton = document.getElementById('calculate-cash');
+const cashAmountElement = document.getElementById('cash-amount');
+
 
 // Переменные для заказа
 let order = [];
@@ -194,6 +200,29 @@ calculateChangeButton.addEventListener('click', () => {
     changeAmountElement.textContent = '0';
   } else {
     changeAmountElement.textContent = change.toFixed(2); // Отображаем сдачу
+  }
+});
+
+// Функция для расчёта сдачи
+calculateCashButton.addEventListener('click', () => {
+  const amountCash = parseFloat(amountCashInput.value); // Сумма, которую внёс клиент
+  if (isNaN(amountCash)) {
+    alert('Введите корректную сумму');
+    return;
+  }
+
+  const cashNal = 50;
+  const cashNall = 100;
+  if (amountCash >= 5) {
+    const cash = cashNal - amountCash; // Расчёт того сколько надо просить
+    cashAmountElement.textContent = cash.toFixed(2) + ' руб.';// Отображаем сколько надо просить
+  } else {
+    alert('Ниже 5 рублей не может быть')
+    cashAmountElement.textContent = 'Скажи что нет сдачи :('
+    } 
+  if (amountCash >= 50) {
+    const cash = cashNall - amountCash
+    cashAmountElement.textContent = cash.toFixed(2) + ' руб.';// Отображаем сколько надо просить
   }
 });
 
