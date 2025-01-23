@@ -20,63 +20,151 @@ const menuItems = [
   { name: "Котлета", price: 90, category: "Снеки" },
 ];
 
-// Элементы для поиска
-const searchInput = document.getElementById('search-input');
-const searchButton = document.getElementById('search-button');
+// Класс для управления заказом
+class OrderManager {
+  constructor() {
+    this.order = [];
+    this.totalPrice = 0;
+  }
 
-// Элементы калькулятора
-const calculatorDisplay = document.getElementById('calculator-display');
-const calculatorButtons = document.getElementById('calculator-buttons');
+  addItem(name, price, quantity) {
+    this.order.push({ name, price, quantity });
+    this.totalPrice += price * quantity;
+  }
 
-// Переменные для калькулятора
+  removeItem(index) {
+    if (index >= 0 && index < this.order.length) {
+      const removedItem = this.order.splice(index, 1)[0];
+      this.totalPrice -= removedItem.price * removedItem.quantity;
+      return true;
+    }
+    return false;
+  }
+}
+
+const orderManager = new OrderManager();
+
+// Отображение меню
+function displayMenu(items = menuItems) {
+  const menuContainer = document.getElementById('menu');
+  menuContainer.innerHTML = '';
+
+  const categories = items.reduce((acc, item) => {
+    if (!acc[item.category]) acc[item.category] = [];
+    acc[item.category].push(item);
+    return acc;
+  }, {});
+
+  for (const [category, items] of Object.entries(categories)) {
+    const categoryElement = document.createElement('div');
+    categoryElement.className = 'category';
+    categoryElement.innerHTML = `<h2>${category}</h2>`;
+    menuContainer.appendChild(categoryElement);
+
+    items.forEach(item => {
+      const itemElement = document.createElement('div');
+      itemElement.className = 'menu-item';
+      itemElement.innerHTML = `
+        <h3>${item.name}</h3>
+        <p>Цена: ${item.price}₽</p>
+        <label>
+          Количество:
+          <input type="number" class="item-quantity" value="1" min="1">
+        </label>
+        <button onclick="addToOrder('${item.name}', ${item.price}, this)">
+          <i class="fas fa-cart-plus"></i> Добавить
+        </button>
+      `;
+      menuContainer.appendChild(itemElement);
+    });
+  }
+}
+
+// Добавление в заказ
+window.addToOrder = (name, price, button) => {
+  const quantity = +button.closest('.menu-item').querySelector('.item-quantity').value;
+  orderManager.addItem(name, price, quantity);
+  updateOrderDisplay();
+};
+
+// Обновление заказа
+function updateOrderDisplay() {
+  const orderList = document.getElementById('order-list');
+  orderList.innerHTML = '';
+
+  orderManager.order.forEach((item, index) => {
+    const orderItem = document.createElement('div');
+    orderItem.className = 'order-item';
+    orderItem.innerHTML = `
+      <span>${item.name} x${item.quantity} — ${(item.price * item.quantity).toFixed(2)}₽</span>
+      <div>
+        <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)">
+        <button onclick="handleRemoveItem(${index})">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    `;
+    orderList.appendChild(orderItem);
+  });
+
+  document.getElementById('total-price').textContent = orderManager.totalPrice.toFixed(2);
+}
+
+// Редактирование количества
+window.updateQuantity = (index, newQuantity) => {
+  newQuantity = Math.max(1, newQuantity);
+  const item = orderManager.order[index];
+  orderManager.totalPrice -= item.price * item.quantity;
+  item.quantity = +newQuantity;
+  orderManager.totalPrice += item.price * item.quantity;
+  updateOrderDisplay();
+};
+
+// Удаление из заказа
+window.handleRemoveItem = (index) => {
+  if (orderManager.removeItem(index)) {
+    updateOrderDisplay();
+  }
+};
+
+// Калькулятор
 let currentInput = '';
 let operator = '';
 let firstOperand = '';
-let secondOperand = '';
+const calculatorDisplay = document.getElementById('calculator-display');
 
-// Обработчик для кнопок калькулятора
-calculatorButtons.addEventListener('click', (e) => {
-  if (e.target.tagName === 'BUTTON') {
-    const value = e.target.dataset.value;
+document.getElementById('calculator-buttons').addEventListener('click', (e) => {
+  if (!e.target.matches('button')) return;
+  const value = e.target.dataset.value;
 
-    if (value === 'C') {
-      // Очистка калькулятора
-      currentInput = '';
+  if (value === 'C') {
+    currentInput = '';
+    operator = '';
+    firstOperand = '';
+    calculatorDisplay.value = '';
+  } else if (value === '←') {
+    currentInput = currentInput.slice(0, -1);
+    calculatorDisplay.value = currentInput;
+  } else if (value === '=') {
+    if (firstOperand && operator && currentInput) {
+      const result = calculate(firstOperand, operator, currentInput);
+      calculatorDisplay.value = result;
+      currentInput = result.toString();
       operator = '';
       firstOperand = '';
-      secondOperand = '';
-      calculatorDisplay.value = '';
-    } else if (value === '←') {
-      // Удаление последней цифры
-      currentInput = currentInput.slice(0, -1); // Удаляем последний символ
-      calculatorDisplay.value = currentInput;
-    } else if (value === '=') {
-      // Вычисление результата
-      if (firstOperand && operator && currentInput) {
-        secondOperand = currentInput;
-        const result = calculate(firstOperand, operator, secondOperand);
-        calculatorDisplay.value = result;
-        currentInput = result;
-        operator = '';
-        firstOperand = '';
-        secondOperand = '';
-      }
-    } else if (['+', '-', '*', '/'].includes(value)) {
-      // Установка оператора
-      if (currentInput) {
-        firstOperand = currentInput;
-        operator = value;
-        currentInput = '';
-      }
-    } else {
-      // Ввод чисел
-      currentInput += value;
-      calculatorDisplay.value = currentInput;
     }
+  } else if (['+', '-', '*', '/'].includes(value)) {
+    if (currentInput) {
+      firstOperand = currentInput;
+      operator = value;
+      currentInput = '';
+    }
+  } else {
+    currentInput += value;
+    calculatorDisplay.value = currentInput;
   }
 });
 
-// Функция для вычисления
 function calculate(a, op, b) {
   a = parseFloat(a);
   b = parseFloat(b);
@@ -85,176 +173,54 @@ function calculate(a, op, b) {
     case '-': return a - b;
     case '*': return a * b;
     case '/': return a / b;
-    default: return .0;
+    default: return 0;
   }
 }
 
-// Элементы для заказа
-const orderList = document.getElementById('order-list');
-const totalPriceElement = document.getElementById('total-price');
+// Расчет сдачи мелкими
+document.getElementById('calculate-change').addEventListener('click', () => {
+  const paid = parseFloat(document.getElementById('amount-paid').value);
+  if (isNaN(paid)) {
+    alert('Введите корректную сумму!');
+    return;
+  }
 
-// Элементы для расчёта сдачи
-const amountPaidInput = document.getElementById('amount-paid');
-const calculateChangeButton = document.getElementById('calculate-change');
-const changeAmountElement = document.getElementById('change-amount');
+  const change = paid - orderManager.totalPrice;
+  const changeElement = document.getElementById('change-amount');
 
-// Элементы для расчёта сдачи
-const amountCashInput = document.getElementById('amount-cash');
-const calculateCashButton = document.getElementById('calculate-cash');
-const cashAmountElement = document.getElementById('cash-amount');
+  if (change >= 0) {
+    let cashToAsk = 0;
+    let target = 0;
 
-
-// Переменные для заказа
-let order = [];
-let totalPrice = 0;
-
-// Функция для отображения меню
-function displayMenu(items = menuItems) {
-  const menuContainer = document.getElementById('menu');
-  menuContainer.innerHTML = ''; // Очищаем контейнер
-
-  // Группируем по категориям
-  const categories = {};
-  items.forEach(item => {
-    if (!categories[item.category]) {
-      categories[item.category] = [];
+    if (change > 50) {
+      // Округляем до ближайших 100
+      target = 100 * Math.ceil(change / 100);
+      cashToAsk = target - change;
+    } else {
+      // Округляем до 50
+      target = 50;
+      cashToAsk = 50 - change;
     }
-    categories[item.category].push(item);
-  });
 
-  // Отображаем категории и элементы меню
-  for (const category in categories) {
-    const categoryElement = document.createElement('div');
-    categoryElement.className = 'category';
-    categoryElement.innerHTML = `<h2>${category}</h2>`;
-    menuContainer.appendChild(categoryElement);
-
-    categories[category].forEach(item => {
-      const itemElement = document.createElement('div');
-      itemElement.className = 'menu-item';
-      itemElement.innerHTML = `
-        <h3>${item.name}</h3>
-        <p>Цена: ${item.price}₽</p>
-        <label>
-          Количество: 
-          <input type="number" value="1" min="1" class="item-quantity">
-        </label>
-        <button onclick="addToOrder('${item.name}', ${item.price}, this)">Добавить в заказ</button>
-      `;
-      menuContainer.appendChild(itemElement);
-    });
-  }
-}
-
-// Функция для добавления в заказ
-window.addToOrder = function (name, price, button) {
-  const quantityInput = button.previousElementSibling.querySelector('.item-quantity');
-  const quantity = parseInt(quantityInput.value, 10);
-
-  if (isNaN(quantity) || quantity <= 0) {
-    alert('Введите корректное количество');
-    return;
-  }
-
-  const totalItemPrice = price * quantity;
-  order.push({ name, price, quantity });
-  totalPrice += totalItemPrice;
-  updateOrder();
-};
-
-// Функция для обновления списка заказов
-function updateOrder() {
-  orderList.innerHTML = '';
-  order.forEach((item, index) => {
-    const orderItem = document.createElement('div');
-    orderItem.className = 'order-item';
-    orderItem.innerHTML = `
-      <span>${item.name} x${item.quantity} - ${item.price * item.quantity}₽</span>
-      <button onclick="removeFromOrder(${index})">Удалить</button>
-    `;
-    orderList.appendChild(orderItem);
-  });
-
-  totalPriceElement.textContent = totalPrice.toFixed(2);
-}
-
-// Функция для удаления из заказа
-window.removeFromOrder = function (index) {
-  const removedItem = order[index];
-  totalPrice -= removedItem.price * removedItem.quantity;
-  order.splice(index, 1);
-  updateOrder();
-};
-
-// Функция для расчёта сдачи
-calculateChangeButton.addEventListener('click', () => {
-  const amountPaid = parseFloat(amountPaidInput.value); // Сумма, которую внёс клиент
-  if (isNaN(amountPaid)) {
-    alert('Введите корректную сумму');
-    return;
-  }
-
-  const change = amountPaid - totalPrice; // Расчёт сдачи
-  if (change < 0) {
-    alert('Недостаточно средств');
-    changeAmountElement.textContent = '0';
+    // Форматируем вывод
+    changeElement.innerHTML = cashToAsk === 0 
+      ? `✅ <strong>${change.toFixed(2)}₽</strong> (без доплаты)` 
+      : `✅ <strong>${change.toFixed(2)}₽</strong><br>Попросить ${cashToAsk}₽ для ${target}₽`;
   } else {
-    changeAmountElement.textContent = change.toFixed(2); // Отображаем сдачу
+    changeElement.textContent = `❌ Не хватает: ${Math.abs(change).toFixed(2)}₽`;
   }
 });
 
-// Функция для расчёта сдачи
-calculateCashButton.addEventListener('click', () => {
-  const amountCash = parseFloat(amountCashInput.value); // Сумма, которую внёс клиент
-  if (isNaN(amountCash)) {
-    alert('Введите корректную сумму');
-    return;
-  }
-
-  const cashNal = 50;
-  const cashNall = 100;
-  if (amountCash >= 5) {
-    const cash = cashNal - amountCash; // Расчёт того сколько надо просить
-    cashAmountElement.textContent = cash.toFixed(2) + ' руб.';// Отображаем сколько надо просить
-  } else {
-    alert('Ниже 5 рублей не может быть')
-    cashAmountElement.textContent = 'Скажи что нет сдачи :('
-    } 
-  if (amountCash >= 50) {
-    const cash = cashNall - amountCash
-    cashAmountElement.textContent = cash.toFixed(2) + ' руб.';// Отображаем сколько надо просить
-  }
-});
-
-// Функция для фильтрации меню
-function filterMenu(searchTerm) {
-  const filteredItems = menuItems.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+// Поиск
+document.getElementById('search-button').addEventListener('click', () => {
+  const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+  const filteredItems = menuItems.filter(item => 
+    item.name.toLowerCase().includes(searchTerm)
   );
-  displayMenu(filteredItems); // Отображаем отфильтрованное меню
-}
-
-// Обработчик для кнопки поиска
-searchButton.addEventListener('click', () => {
-  const searchTerm = searchInput.value.trim();
-  if (searchTerm) {
-    filterMenu(searchTerm);
-  } else {
-    displayMenu(menuItems); // Если поле пустое, показываем всё меню
-  }
+  displayMenu(filteredItems);
 });
 
-// Обработчик для поиска при вводе (опционально)
-searchInput.addEventListener('input', () => {
-  const searchTerm = searchInput.value.trim();
-  if (searchTerm) {
-    filterMenu(searchTerm);
-  } else {
-    displayMenu(menuItems); // Если поле пустое, показываем всё меню
-  }
-});
-
-// Инициализация
-window.addEventListener("load", function () {
-  displayMenu(); // Отображаем меню при загрузке страницы
+// Загрузка страницы
+window.addEventListener('load', () => {
+  displayMenu();
 });

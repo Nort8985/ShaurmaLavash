@@ -4,54 +4,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Шаурма Лаваш</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Меню</h1>
+  <h1>🍴 Меню</h1>
   <div id="search-container">
-    <input type="text" id="search-input" placeholder="Поиск по меню">
-    <button id="search-button">Найти</button>
+    <input type="text" id="search-input" placeholder="Поиск по меню...">
+    <button id="search-button"><i class="fas fa-search"></i> Найти</button>
   </div>
-  <p>Общая стоимость: <span id="total-price">0.00</span> руб.</p>
+  <p class="total-price">Общая стоимость: <span id="total-price">0.00</span> руб.</p>
   <div id="menu"></div>
 
-  <h2>Заказ</h2>
+  <h2>🛒 Заказ</h2>
   <div id="order-list"></div>
 
-  <h2>Калькулятор</h2>
-  <div id="calculator">
-  <input type="text" id="calculator-display" disabled>
-  <div id="calculator-buttons">
-    <button data-value="7">7</button>
-    <button data-value="8">8</button>
-    <button data-value="9">9</button>
-    <button data-value="/">/</button>
-    <button data-value="4">4</button>
-    <button data-value="5">5</button>
-    <button data-value="6">6</button>
-    <button data-value="*">*</button>
-    <button data-value="1">1</button>
-    <button data-value="2">2</button>
-    <button data-value="3">3</button>
-    <button data-value="-">-</button>
-    <button data-value="0">0</button>
-    <button data-value=".">.</button>
-    <button data-value="C">C</button>
-    <button data-value="←">←</button> <!-- Новая кнопка "Удалить" -->
-    <button data-value="+">+</button>
-    <button data-value="=" class="equals">=</button>
+  <div class="calculator-section">
+    <h2>🧮 Калькулятор</h2>
+    <div id="calculator">
+      <input type="text" id="calculator-display" disabled>
+      <div id="calculator-buttons">
+        <button data-value="7">7</button>
+        <button data-value="8">8</button>
+        <button data-value="9">9</button>
+        <button data-value="/">/</button>
+        <button data-value="4">4</button>
+        <button data-value="5">5</button>
+        <button data-value="6">6</button>
+        <button data-value="*">*</button>
+        <button data-value="1">1</button>
+        <button data-value="2">2</button>
+        <button data-value="3">3</button>
+        <button data-value="-">-</button>
+        <button data-value="0">0</button>
+        <button data-value=".">.</button>
+        <button data-value="C"><i class="fas fa-eraser"></i></button>
+        <button data-value="←"><i class="fas fa-backspace"></i></button>
+        <button data-value="+">+</button>
+        <button data-value="=" class="equals">=</button>
+      </div>
+    </div>
   </div>
-</div>
+
+  <div class="change-section">
+    <h2>💰 Сдача</h2>
     <div id="change-calculator">
       <input type="number" id="amount-paid" placeholder="Внесенная сумма">
-      <button id="calculate-change">Рассчитать сдачу</button>
-      <p>Сдача: <span id="change-amount">0</span> руб.</p>
-    </div>
-    <div align="center"><h3 class="textik">Если нет сдачи то ниже введи сумму которая должна быть и тебе подскажут сколько надо спросить чтобы ты дал(а) сдачу 50 руб.<br><br>Если написать больше 50 то считать будет для сдачи в 100 руб.<h4 class="textik">(незнаю зачем, вдруг понадобиться)</h4></h3></div>
-    <div id="cash-calculator">
-      <input type="number" id="amount-cash" placeholder="Сколько сдача">
-      <button id="calculate-cash">Сколько спросить</button>
-      <p>Спросить: <span id="cash-amount">0</span></p>
+      <button id="calculate-change"><i class="fas fa-coins"></i> Рассчитать</button>
+      <p>Сдача: <span id="change-amount">0.00</span></p>
+      <h2>💰 Сдача</h2>
     </div>
   </div>
 
