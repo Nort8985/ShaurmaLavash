@@ -28,6 +28,7 @@ class OrderManager {
   }
 
   addItem(name, price, quantity) {
+    quantity = Math.max(1, parseInt(quantity) || 1);
     this.order.push({ name, price, quantity });
     this.totalPrice += price * quantity;
   }
@@ -71,21 +72,19 @@ function displayMenu(items = menuItems) {
           Количество:
           <input type="number" class="item-quantity" value="1" min="1">
         </label>
-        <button onclick="addToOrder('${item.name}', ${item.price}, this)">
+        <button>
           <i class="fas fa-cart-plus"></i> Добавить
         </button>
       `;
+      itemElement.querySelector('button').addEventListener('click', () => {
+        const quantity = +itemElement.querySelector('.item-quantity').value;
+        orderManager.addItem(item.name, item.price, quantity);
+        updateOrderDisplay();
+      });
       menuContainer.appendChild(itemElement);
     });
   }
 }
-
-// Добавление в заказ
-window.addToOrder = (name, price, button) => {
-  const quantity = +button.closest('.menu-item').querySelector('.item-quantity').value;
-  orderManager.addItem(name, price, quantity);
-  updateOrderDisplay();
-};
 
 // Обновление заказа
 function updateOrderDisplay() {
@@ -96,7 +95,7 @@ function updateOrderDisplay() {
     const orderItem = document.createElement('div');
     orderItem.className = 'order-item';
     orderItem.innerHTML = `
-      <span>${item.name} x${item.quantity} — ${(item.price * item.quantity).toFixed(2)}₽</span>
+      <span>${item.name} x${item.quantity} — ${(item.price * item.quantity).toLocaleString('ru-RU')}₽</span>
       <div>
         <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)">
         <button onclick="handleRemoveItem(${index})">
@@ -107,7 +106,7 @@ function updateOrderDisplay() {
     orderList.appendChild(orderItem);
   });
 
-  document.getElementById('total-price').textContent = orderManager.totalPrice.toFixed(2);
+  document.getElementById('total-price').textContent = orderManager.totalPrice.toLocaleString('ru-RU', {minimumFractionDigits: 2});
 }
 
 // Редактирование количества
@@ -122,8 +121,10 @@ window.updateQuantity = (index, newQuantity) => {
 
 // Удаление из заказа
 window.handleRemoveItem = (index) => {
-  if (orderManager.removeItem(index)) {
-    updateOrderDisplay();
+  if (confirm("Удалить позицию из заказа?")) {
+    if (orderManager.removeItem(index)) {
+      updateOrderDisplay();
+    }
   }
 };
 
@@ -154,7 +155,7 @@ document.getElementById('calculator-buttons').addEventListener('click', (e) => {
       firstOperand = '';
     }
   } else if (['+', '-', '*', '/'].includes(value)) {
-    if (currentInput) {
+    if (currentInput && !operator) {
       firstOperand = currentInput;
       operator = value;
       currentInput = '';
@@ -212,12 +213,15 @@ document.getElementById('calculate-change').addEventListener('click', () => {
 });
 
 // Поиск
-document.getElementById('search-button').addEventListener('click', () => {
-  const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
-  const filteredItems = menuItems.filter(item => 
-    item.name.toLowerCase().includes(searchTerm)
-  );
-  displayMenu(filteredItems);
+let searchTimeout;
+document.getElementById('search-input').addEventListener('input', (e) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    const filteredItems = menuItems.filter(item => 
+      item.name.toLowerCase().includes(e.target.value.trim().toLowerCase())
+    );
+    displayMenu(filteredItems);
+  }, 300);
 });
 
 // Загрузка страницы
