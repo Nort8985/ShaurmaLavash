@@ -5,56 +5,552 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Шаурма Лаваш</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #ff6f61; /* Теплый коралловый */
+      --secondary-color: #4a4e69; /* Темно-синий */
+      --background: #f9f7f3; /* Светлый кремовый */
+      --text-dark: #22223b; /* Темно-серый */
+      --success-color: #52b788; /* Зеленый для кнопок */
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --border-radius: 12px;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--background);
+      color: var(--text-dark);
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    #search-container {
+      max-width: 500px;
+      margin: 0 auto 40px;
+      display: flex;
+      gap: 10px;
+    }
+
+    #search-input {
+      flex: 1;
+      padding: 12px 20px;
+      border: 2px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    #search-input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    #search-button {
+      padding: 12px 20px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #search-button:hover {
+      background: #e65a4d; /* Темнее на 10% */
+    }
+
+    #menu {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .total-price {
+      text-align: center;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--secondary-color);
+    }
+
+    .category {
+      margin-bottom: 40px;
+    }
+
+    .category h2 {
+      font-size: 1.8rem;
+      color: var(--secondary-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .menu-item {
+      display: grid;
+      grid-template-columns: 2fr 1fr 2fr;
+      align-items: center;
+      background: white;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 15px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .menu-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .menu-item h3 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: var(--text-dark);
+    }
+
+    .menu-item p {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .item-quantity {
+      width: 60px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    button {
+      background: var(--success-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #46a074; /* Темнее на 10% */
+    }
+
+    #order {
+      max-width: 900px;
+      margin: 40px auto;
+    }
+
+    #order h2 {
+      font-size: 1.8rem;
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+    }
+
+    .order-item {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      background: white;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 10px;
+    }
+
+    .calculator-section, .change-section {
+      max-width: 500px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    .calculator-section h2, .change-section h2 {
+      font-size: 1.8rem;
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+    }
+
+    #calculator-display, #amount-paid {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    #calculator-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    #calculate-change {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .menu-item, .order-item {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .controls {
+        justify-content: center;
+        margin-top: 10px;
+      }
+
+      #search-container {
+        flex-direction: column;
+      }
+
+      #search-button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>🍴 Меню</h1>
-  <div id="search-container">
-    <input type="text" id="search-input" placeholder="Поиск по меню...">
-    <button id="search-button"><i class="fas fa-search"></i> Найти</button>
-  </div>
-  <p class="total-price">Общая стоимость: <span id="total-price">0.00</span> руб.</p>
-  <div id="menu"></div>
+  <header>
+    <h1>🍴 Шаурма Лаваш</h1>
+  </header>
 
-  <h2>🛒 Заказ</h2>
-  <div id="order-list"></div>
+  <main>
+    <section id="search-container">
+      <input type="text" id="search-input" placeholder="Найти блюдо...">
+      <button id="search-button"><i class="fas fa-search"></i></button>
+    </section>
 
-  <div class="calculator-section">
-    <h2>🧮 Калькулятор</h2>
-    <div id="calculator">
-      <input type="text" id="calculator-display" disabled>
-      <div id="calculator-buttons">
-        <button data-value="7">7</button>
-        <button data-value="8">8</button>
-        <button data-value="9">9</button>
-        <button data-value="/">/</button>
-        <button data-value="4">4</button>
-        <button data-value="5">5</button>
-        <button data-value="6">6</button>
-        <button data-value="*">*</button>
-        <button data-value="1">1</button>
-        <button data-value="2">2</button>
-        <button data-value="3">3</button>
-        <button data-value="-">-</button>
-        <button data-value="0">0</button>
-        <button data-value=".">.</button>
-        <button data-value="C"><i class="fas fa-eraser"></i></button>
-        <button data-value="←"><i class="fas fa-backspace"></i></button>
-        <button data-value="+">+</button>
-        <button data-value="=" class="equals">=</button>
+    <section id="menu">
+      <p class="total-price">Общая стоимость: <span id="total-price">0</span> руб.</p>
+
+      <article class="category">
+        <h2>Шаурма</h2>
+        <div class="menu-item">
+          <h3>Классическая</h3>
+          <p>190₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Острая</h3>
+          <p>210₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Экзотическая</h3>
+          <p>210₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Сырная</h3>
+          <p>220₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Грибная</h3>
+          <p>230₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>С вишней</h3>
+          <p>235₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Биг тэсти</h3>
+          <p>245₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="category">
+        <h2>Сосиски в лаваше</h2>
+        <div class="menu-item">
+          <h3>С овощами</h3>
+          <p>120₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>С сыром</h3>
+          <p>135₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="category">
+        <h2>Снеки</h2>
+        <div class="menu-item">
+          <h3>Картофель фри</h3>
+          <p>85₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Наггетсы</h3>
+          <p>110₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Сырные палочки</h3>
+          <p>115₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Котлета</h3>
+          <p>90₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="category">
+        <h2>Горячие напитки</h2>
+        <div class="menu-item">
+          <h3>Эспрессо</h3>
+          <p>60₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Американо</h3>
+          <p>80₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Капучино</h3>
+          <p>100₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Латте</h3>
+          <p>100₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <h3>Чай</h3>
+          <p>45₽</p>
+          <div class="controls">
+            <label>Кол-во: <input type="number" class="item-quantity" value="1" min="1"></label>
+            <button><i class="fas fa-cart-plus"></i> Добавить</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section id="order">
+      <h2>🛒 Ваш заказ</h2>
+      <div id="order-list">
+        <div class="order-item">
+         
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="change-section">
-    <h2>💰 Сдача</h2>
-    <div id="change-calculator">
-      <input type="number" id="amount-paid" placeholder="Внесенная сумма">
-      <button id="calculate-change"><i class="fas fa-coins"></i> Рассчитать</button>
-      <p>Сдача: <span id="change-amount">0.00</span></p>
-    </div>
-  </div>
+    <section class="calculator-section">
+      <h2>🧮 Калькулятор</h2>
+      <div id="calculator">
+        <input type="text" id="calculator-display" disabled>
+        <div id="calculator-buttons">
+          <button data-value="7">7</button>
+          <button data-value="8">8</button>
+          <button data-value="9">9</button>
+          <button data-value="/">/</button>
+          <button data-value="4">4</button>
+          <button data-value="5">5</button>
+          <button data-value="6">6</button>
+          <button data-value="*">*</button>
+          <button data-value="1">1</button>
+          <button data-value="2">2</button>
+          <button data-value="3">3</button>
+          <button data-value="-">-</button>
+          <button data-value="0">0</button>
+          <button data-value=".">.</button>
+          <button data-value="C"><i class="fas fa-eraser"></i></button>
+          <button data-value="←"><i class="fas fa-backspace"></i></button>
+          <button data-value="+">+</button>
+          <button data-value="=" class="equals">=</button>
+        </div>
+      </div>
+    </section>
 
-  <script type="module" src="app.js"></script>
+    <section class="change-section">
+      <h2>💰 Сдача</h2>
+      <div id="change-calculator">
+        <input type="number" id="amount-paid" placeholder="Внесенная сумма">
+        <button id="calculate-change"><i class="fas fa-coins"></i> Рассчитать</button>
+        <p>Сдача: <span id="change-amount">0.00</span> руб.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('search-input');
+      const searchButton = document.getElementById('search-button');
+      const menuItems = document.querySelectorAll('.menu-item');
+      const orderList = document.getElementById('order-list');
+      const totalPriceElement = document.getElementById('total-price');
+      const calculatorDisplay = document.getElementById('calculator-display');
+      const calculatorButtons = document.getElementById('calculator-buttons');
+      const amountPaidInput = document.getElementById('amount-paid');
+      const calculateChangeButton = document.getElementById('calculate-change');
+      const changeAmountElement = document.getElementById('change-amount');
+
+      let totalPrice = 0;
+      let calculatorValue = '';
+
+      function filterMenu() {
+        const query = searchInput.value.toLowerCase();
+        menuItems.forEach(item => {
+          const name = item.querySelector('h3').textContent.toLowerCase();
+          item.style.display = name.includes(query) ? 'grid' : 'none';
+        });
+      }
+
+      searchInput.addEventListener('input', filterMenu);
+      searchButton.addEventListener('click', filterMenu);
+
+      menuItems.forEach(item => {
+        const addButton = item.querySelector('button');
+        addButton.addEventListener('click', () => {
+          const name = item.querySelector('h3').textContent;
+          const price = parseFloat(item.querySelector('p').textContent.replace('₽', ''));
+          const quantity = parseInt(item.querySelector('.item-quantity').value);
+
+          const orderItem = document.createElement('div');
+          orderItem.classList.add('order-item');
+          orderItem.innerHTML = `
+            <span>${name} x${quantity} — ${price * quantity}₽</span>
+            <div class="controls">
+              <input type="number" value="${quantity}" min="1">
+              <button><i class="fas fa-trash"></i></button>
+            </div>
+          `;
+
+          orderItem.querySelector('button').addEventListener('click', () => {
+            const itemPrice = price * parseInt(orderItem.querySelector('input').value);
+            totalPrice -= itemPrice;
+            updateTotalPrice();
+            orderItem.remove();
+          });
+
+          orderItem.querySelector('input').addEventListener('change', (e) => {
+            const newQuantity = parseInt(e.target.value);
+            const oldQuantity = parseInt(orderItem.querySelector('span').textContent.split('x')[1]);
+            const priceDifference = price * (newQuantity - oldQuantity);
+            totalPrice += priceDifference;
+            orderItem.querySelector('span').textContent = `${name} x${newQuantity} — ${price * newQuantity}₽`;
+            updateTotalPrice();
+          });
+
+          orderList.appendChild(orderItem);
+          totalPrice += price * quantity;
+          updateTotalPrice();
+        });
+      });
+
+      function updateTotalPrice() {
+        totalPriceElement.textContent = totalPrice.toFixed(2);
+      }
+
+      calculatorButtons.addEventListener('click', (e) => {
+        const button = e.target.closest('button');
+        if (!button) return;
+
+        const value = button.dataset.value;
+
+        if (value === 'C') {
+          calculatorValue = '';
+        } else if (value === '←') {
+          calculatorValue = calculatorValue.slice(0, -1);
+        } else if (value === '=') {
+          try {
+            calculatorValue = eval(calculatorValue).toString();
+          } catch {
+            calculatorValue = 'Ошибка';
+          }
+        } else {
+          calculatorValue += value;
+        }
+
+        calculatorDisplay.value = calculatorValue;
+      });
+
+      calculateChangeButton.addEventListener('click', () => {
+        const amountPaid = parseFloat(amountPaidInput.value) || 0;
+        const change = amountPaid - totalPrice;
+        changeAmountElement.textContent = change >= 0 ? change.toFixed(2) : 'Недостаточно средств';
+      });
+    });
+  </script>
 </body>
-</html>
+                                   </html>
